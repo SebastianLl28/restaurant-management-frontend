@@ -1,10 +1,10 @@
-import { LocationAdapter } from '@/adapters/location.adapter'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Location } from '@/model/Location.model'
 import { Phone } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-const LocationCard = ({ name, address, phone, id }: LocationAdapter) => {
+const LocationCard = ({ name, address, phone, id }: Location) => {
   const navigate = useNavigate()
 
   const handleClick = () => {

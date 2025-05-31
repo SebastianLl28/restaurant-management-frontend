@@ -1,22 +1,19 @@
-import { Customer } from '@/model/Customer.model'
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
 
-interface CustomerStore extends Pick<Customer, 'id' | 'email' | 'name'> {}
+interface CustomerStore {
+  username: string
+  id: number
+}
 
 interface LoginStore {
   user: CustomerStore | null
   setUser: (user: CustomerStore) => void
+  clearUser: () => void
 }
 
-export const useLoginStore = create(
-  persist<LoginStore>(
-    set => ({
-      user: null,
-      setUser: (user: CustomerStore) => set({ user })
-    }),
-    {
-      name: 'login-storage'
-    }
-  )
-)
+// TODO: Save more data in the store, to make payments
+export const useLoginStore = create<LoginStore>(set => ({
+  user: null,
+  setUser: (user: CustomerStore) => set({ user }),
+  clearUser: () => set({ user: null })
+}))

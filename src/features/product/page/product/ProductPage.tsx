@@ -1,27 +1,35 @@
-import { Navigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useGetProductById } from '../../hook/useProduct.hook'
-import { PUBLIC_ROUTER } from '@/config/path'
-import { useMemo, useState } from 'react'
-import LocationDialog from '@/features/location/component/dialog/LocationDialog'
+import { useEffect, useMemo } from 'react'
 import { useLocationSelectedStore } from '@/store/locationSelectedStore'
 import { useGetProductLocationStock } from '../../hook/useProductLocationStock.hook'
+import ProductHero from './ProductHero'
+import ProductGallery from './ProductGallery'
+import ProductReviews from './ProductReviews'
+import ProductRelated from './ProductRelated'
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>()
 
-  const { data, isLoading, isSuccess, isError } = useGetProductById(Number(id))
+  const { data: product, isLoading, isSuccess } = useGetProductById(Number(id))
 
   const locationSelected = useLocationSelectedStore(state => state.selected)
+  const setOpenLocationModal = useLocationSelectedStore(
+    state => state.setOpenModal
+  )
 
-  // TODO: Tambien validar las dirección del cliente seleccionado ( district )
-  const [locationOpen, setLocationOpen] = useState(locationSelected === null)
+  useEffect(() => {
+    if (!locationSelected) {
+      setOpenLocationModal(true)
+    }
+  }, [locationSelected, setOpenLocationModal])
 
   const productId = useMemo(() => {
-    if (isSuccess && data) {
-      return data.id
+    if (isSuccess && product) {
+      return product.id
     }
     return undefined
-  }, [isSuccess, data])
+  }, [isSuccess, product])
 
   const locationId = useMemo(() => {
     if (locationSelected) {
@@ -32,21 +40,24 @@ const ProductPage = () => {
 
   const { data: stock } = useGetProductLocationStock({ productId, locationId })
 
-  let content
-
-  if (isLoading) {
-    // TODO: Create skeleton loader
-    content = <p>loading....</p>
-  } else if (isError) {
-    content = <Navigate to={PUBLIC_ROUTER.PRODUCTS} />
-  } else if (isSuccess && data) {
-    content = <div>{data.name}</div>
-  }
-
   return (
     <>
-      <main>{content}</main>
-      <LocationDialog isOpen={locationOpen} setIsOpen={setLocationOpen} />
+      {product && stock && (
+        <ProductHero product={product} productLocationStock={stock} />
+      )}
+      <div className='container my-12 grid grid-cols-[1fr,25rem] gap-x-6'>
+        <div className='space-y-12'>
+          <ProductGallery
+            productGalleryList={product?.productGalleryList}
+            isLoading={isLoading}
+          />
+          <ProductReviews
+            isLoading={isLoading}
+            reviewList={product?.reviewList}
+          />
+        </div>
+        <ProductRelated productId={product?.id || 0} />
+      </div>
     </>
   )
 }
@@ -54,6 +65,11 @@ const ProductPage = () => {
 export default ProductPage
 
 // TODO: IMPLEMENTAR LA VISTA DE PRODUCTO
-// TODO: CAMBIAR EL LOCATION DESDE EL NAVBAR
+// - [X] Implementar los comentarios
+// - [-] Implementar el ranking de producto [ ] / reseñas / compras
+// - [X] Implementar los productos relacionados
+// - [ ] Implementar el contador de productos y el boton de agregar al carrito
+// TODO: CAMBIAR EL LOCATION DESDE EL NAVBAR [X]
 // TODO: IMPLEMENTAR EL BUSCARDOR
 // TODO: IMPLEMENTAR EL RANKING DE PRODUCTO Y EL RANKING DE TIENDAS Y COMENTARIOS DEL PRODUCTO
+// TODO: Tambien validar las dirección del cliente seleccionado ( district )

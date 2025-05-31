@@ -1,12 +1,15 @@
-import { ProductStockAdapter } from '@/adapters/product.adapter'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface IProduct
-  extends Pick<
-    ProductStockAdapter,
-    'id' | 'name' | 'imageUrl' | 'price' | 'stock' | 'description'
-  > {}
+interface IProduct {
+  id: number
+  name: string
+  imageUrl: string
+  price: number
+  stock: { store: string; quantity: number }[]
+  description: string
+}
+
 export interface IProductstore extends IProduct {
   quantity: number
 }

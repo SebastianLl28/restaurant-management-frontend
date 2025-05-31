@@ -8,9 +8,9 @@ import { useGetLocations } from '../../hook/location.hook'
 import { Button } from '@/components/ui/button'
 import { useLocationSelectedStore } from '@/store/locationSelectedStore'
 import { Location } from '@/model/Location.model'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import LocationDialogCard from './LocationDialogCard'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { PUBLIC_ROUTER } from '@/config/path'
 
 interface Props {
@@ -20,11 +20,13 @@ interface Props {
 
 const LocationDialog = ({ isOpen, setIsOpen }: Props) => {
   const navigate = useNavigate()
+  const path = useLocation().pathname
   const { isSuccess, data: locations } = useGetLocations()
   const locationSelected = useLocationSelectedStore(state => state.selected)
   const setLocationSelected = useLocationSelectedStore(
     state => state.setSelected
   )
+
   const isLocationSelected = useCallback(
     (location: Location) => locationSelected?.id === location.id,
     [locationSelected]
@@ -37,6 +39,23 @@ const LocationDialog = ({ isOpen, setIsOpen }: Props) => {
     }
     setLocationSelected(location)
   }
+
+  const handleCancel = useCallback(() => {
+    setIsOpen(false)
+    navigate(PUBLIC_ROUTER.PRODUCTS)
+  }, [setIsOpen, navigate])
+
+  const cancelButton = useMemo(() => {
+    const regex = /^\/products\/\d+$/
+    if (regex.test(path)) {
+      return (
+        <Button variant='ghost' onClick={handleCancel}>
+          Volver
+        </Button>
+      )
+    }
+    return null
+  }, [path, handleCancel])
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -56,12 +75,7 @@ const LocationDialog = ({ isOpen, setIsOpen }: Props) => {
             ))}
         </ul>
         <AlertDialogFooter>
-          <Button
-            variant='ghost'
-            onClick={() => navigate(PUBLIC_ROUTER.PRODUCTS)}
-          >
-            Volver
-          </Button>
+          {cancelButton}
           <Button
             variant='default'
             onClick={() => setIsOpen(false)}

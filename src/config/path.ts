@@ -13,5 +13,6 @@ export const PUBLIC_ROUTER = {
   PRODUCT_DETAIL: '/products/:id',
   LOCATIONS: '/locations',
   LOCATION_DETAIL: '/locations/:id',
-  CONTACT: '/contact'
+  CONTACT: '/contact',
+  PAYMENT: '/payment'
 }

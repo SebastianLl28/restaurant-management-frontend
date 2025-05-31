@@ -24,7 +24,9 @@ const header = [
 const PrivateHeader = () => {
   const refLine = useRef<HTMLDivElement | null>(null)
 
-  const handleClick = (e: MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>) => {
+  const handleClick = (
+    e: MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>
+  ) => {
     const target = e.target as HTMLAnchorElement
     const rect = target.getBoundingClientRect()
 
@@ -51,7 +53,7 @@ const PrivateHeader = () => {
   }, [pathname])
 
   return (
-    <header>
+    <header className='h-min'>
       <nav className='py-12'>
         <ul className='relative flex justify-center'>
           {header.map((item, index) => (

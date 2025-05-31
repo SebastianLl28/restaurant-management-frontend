@@ -1,7 +1,7 @@
 import { apiClient, PRODUCT_ENDPOINT } from '@/config/endpoints'
 import { convertObjectToQueryString } from '@/lib/queryString'
 import { IPagination } from '@/model/Pagination.model'
-import { Product } from '@/model/Product.model'
+import { Product, ProductDetail } from '@/model/Product.model'
 import { IProductFilter } from '../interface/IProductFilter'
 
 interface Props {
@@ -15,5 +15,21 @@ export const getProducts = async ({ filter }: Props) => {
 
 export const getProductById = async (id: number) => {
   const url = `${PRODUCT_ENDPOINT}/${id}`
-  return await apiClient.get<Product>(url).then(res => res.data)
+  return await apiClient.get<ProductDetail>(url).then(res => res.data)
+}
+
+interface RelatedProp {
+  productId: number
+  customerId?: number
+}
+
+export const getRelatedProducts = async ({
+  productId,
+  customerId
+}: RelatedProp) => {
+  let url = `${PRODUCT_ENDPOINT}/${productId}/related`
+  if (customerId) {
+    url = `${url}?customerId=${customerId}`
+  }
+  return await apiClient.get<Product[]>(url).then(res => res.data)
 }

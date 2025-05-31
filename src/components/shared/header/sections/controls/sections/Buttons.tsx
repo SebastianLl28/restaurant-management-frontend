@@ -7,6 +7,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { MapPin, Search, ShoppingCart, User } from 'lucide-react'
 import { useSearchStore } from '@/store/searchStore'
 import { useLoginStore } from '@/store/loginStore'
+import { objectIsEmpty } from '@/lib/utils'
 
 const Buttons = () => {
   const { open } = useLoginModalStore()
@@ -57,10 +58,10 @@ const Buttons = () => {
           </span>
         </Button>
       </li>
-      {user ? (
+      {!objectIsEmpty(user) ? (
         <li className={`${buttonVariants({ variant: 'ghost' })} px-0`}>
           <Link to='/profile' className='flex items-center gap-2 px-2'>
-            <span>{user.name}</span>
+            <span>{user?.name}</span>
             <User size={33} />
           </Link>
         </li>

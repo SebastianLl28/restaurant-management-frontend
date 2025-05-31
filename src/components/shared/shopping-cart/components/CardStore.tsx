@@ -15,7 +15,8 @@ const CardStore = ({
   description,
   ...args
 }: IProductstore) => {
-  const { removeItem, addItem, findItem, setQuantity, deleteItem } = useCartStore()
+  const { removeItem, addItem, findItem, setQuantity, deleteItem } =
+    useCartStore()
   const { selected } = useLocationSelectedStore()
 
   const findStock = useCallback(() => {
@@ -36,27 +37,28 @@ const CardStore = ({
     addItem({ id, name, imageUrl, price, description, stock, ...args })
   }
 
-  // Check if the location is selected and if the item is in stock
-  useEffect(() => {
-    // If the store is not selected, return
-    if (!selected) return
+  // TODO: check if the item is in stock | verify
+  // // Check if the location is selected and if the item is in stock
+  // useEffect(() => {
+  //   // If the store is not selected, return
+  //   if (!selected) return
 
-    // If the item is not found, return
-    const item = findItem(id)
-    if (!item) return
+  //   // If the item is not found, return
+  //   const item = findItem(id)
+  //   if (!item) return
 
-    // If the stock is not found, return
-    const stockSelected = findStock()
-    if (!stockSelected) {
-      deleteItem(id)
-      return
-    }
+  //   // If the stock is not found, return
+  //   const stockSelected = findStock()
+  //   if (!stockSelected) {
+  //     deleteItem(id)
+  //     return
+  //   }
 
-    if (item.quantity > stockSelected.quantity) {
-      setQuantity(id, 1)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, setQuantity, findItem, id, findStock, removeItem])
+  //   if (item.quantity > stockSelected.quantity) {
+  //     setQuantity(id, 1)
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selected, setQuantity, findItem, id, findStock, removeItem])
 
   const priceTotal = useMemo(
     () => new Decimal(quantity).times(price).toFixed(2).toString(),
@@ -84,7 +86,15 @@ const CardStore = ({
               <Button
                 className='size-6'
                 onClick={() =>
-                  removeItem({ id, name, description, imageUrl, price, stock, ...args })
+                  removeItem({
+                    id,
+                    name,
+                    description,
+                    imageUrl,
+                    price,
+                    stock,
+                    ...args
+                  })
                 }
                 variant='outline'
                 size='icon'

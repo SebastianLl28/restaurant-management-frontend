@@ -1,6 +1,6 @@
 import { PRODUCT_LOCATION_STOCK_QUERY_KEY } from '@/config/keys'
 import { useQuery } from '@tanstack/react-query'
-import { getProductLocationStockByProductIdAndLocationId } from '../service/ProductLocationStock.service'
+import { getProductLocationStockByProductIdAndLocationId } from '../service/productLocationStock.service'
 
 export interface GetProductLocationStockProps {
   productId: number | undefined
@@ -12,7 +12,7 @@ export const useGetProductLocationStock = ({
   locationId
 }: GetProductLocationStockProps) =>
   useQuery({
-    queryKey: [...PRODUCT_LOCATION_STOCK_QUERY_KEY, productId, locationId],
+    queryKey: [...PRODUCT_LOCATION_STOCK_QUERY_KEY, {productId, locationId}],
     queryFn: () =>
       getProductLocationStockByProductIdAndLocationId({
         locationId,

@@ -30,3 +30,6 @@ export const CATEGORY_ENDPOINT = `${PUBLIC_ENDPOINT_V1}/category`
 export const PRODUCT_ENDPOINT = `${PUBLIC_ENDPOINT_V1}/product`
 export const LOCATION_ENDPOINT = `${PUBLIC_ENDPOINT_V1}/location`
 export const PRODUCT_LOCATION_STOCK_ENDPOINT = `${PUBLIC_ENDPOINT_V1}/product-location-stock`
+
+export const USER_ENDPOINT = `${SECURE_ENDPOINT_V1}/user`
+export const PROFILE_ENDPOINT = `${USER_ENDPOINT}/profile`

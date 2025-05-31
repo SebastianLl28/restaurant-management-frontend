@@ -5,8 +5,8 @@ import { useModalStore } from '@/store/modalStore'
 import { useNavigate } from 'react-router-dom'
 
 const Body = () => {
-  const { items } = useCartStore()
-  const { setIsOpen } = useModalStore()
+  const items = useCartStore(state => state.items)
+  const setIsOpen = useModalStore(state => state.setIsOpen)
   const navigate = useNavigate()
 
   const handleClickProduct = () => {
@@ -21,7 +21,11 @@ const Body = () => {
           <p className='self-center text-pretty text-center font-semibold'>
             No hay Productos en el Carrito de Compras
           </p>
-          <Button variant='outline' className='self-center' onClick={handleClickProduct}>
+          <Button
+            variant='outline'
+            className='self-center'
+            onClick={handleClickProduct}
+          >
             Productos
           </Button>
         </div>
